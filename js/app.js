@@ -1,23 +1,23 @@
 // JS Data
 const platforms = [];
-const platBottom = 100;
-let gameOver = false;
-const jumpDist = 20;
-const fallDist = 20;
+let startPoint = 100;
+const platBottom = startPoint;
+let isGameOver = false;
+const jumpDist = 10;
+const fallDist = 10;
+let isJumping;
 let jumpTimer;
 let fallTimer;
-class Vector {
-    constructor(x, y)
-}
+let score = 0;
 
 // CSS Data
 const containerWidth = 600
 const containerHeight = 700;
-const platformWidth = 60;
+const platformWidth = 100;
 const platformHeight = 10;
 
 // Functions
-const makePlatform = (num) => {
+const makePlatforms = (num) => {
     for (let i = 1; i <= num; i++) {
         const $platform = $("<div>").addClass("platform");
         let randLeft = Math.random() * (containerWidth - platformWidth);
@@ -26,6 +26,32 @@ const makePlatform = (num) => {
         $platform.css("bottom", `${randBottom}` + `px`);
         platforms.push($platform);
         $(".container").append($platform);
+        // console.log(platforms);
+    }
+}
+
+const newPlatform = (newPlatBottom) => {
+    const $platform = $("<div>").addClass("platform");
+    let randLeft = Math.random() * (containerWidth - platformWidth);
+    $platform.css("left", `${randLeft}` + `px`);
+    $platform.css("bottom", `${newPlatBottom}` + `px`);
+    platforms.push($platform);
+    $(".container").append($platform);
+}
+
+const movePlatforms = () => {
+    if (parseFloat($(".doodler").css("bottom")) > 450) {
+        platforms.forEach(platform => {
+            let newBottom = parseFloat(platform.css("bottom")) - 3;
+            platform.css("bottom", `${newBottom}` + `px`);
+            if (parseFloat(platform.css("bottom")) < 3) {
+                let firstPlatform = platforms[0];
+                firstPlatform.removeClass("platform");
+                platforms.shift();
+                score++;
+                newPlatform(600);
+            }
+        })
     }
 }
 
@@ -35,59 +61,52 @@ const makeDoodler = () => {
     let doodlerBottom = platBottom + platformHeight;
     $doodler.css("left", `${doodlerLeft}` + `px`);
     $doodler.css("bottom", `${doodlerBottom}` + `px`);
-    // $doodler.addClass("jump");
-    // if ($doodler.css("bottom") === "500px") {
-    //     $doodler.removeClass("jump").addClass("fall");
-    // }
     $(".container").append($doodler);
 }
 
 const fall = () => {
-    console.log("fall");
-    // $(".doodler").switchClass("jump", "fall", 2000, "linear", jump);
-    // $(".doodler").removeClass("jump");
-    // $(".doodler").addClass("fall");
+    isJumping = false;
+    clearInterval(jumpTimer);
+    fallTimer = setInterval(function() {
+        let doodlerBottom = parseFloat($(".doodler").css("bottom")) - fallDist;
+        $(".doodler").css("bottom", `${doodlerBottom}` + `px`);
+        if (parseFloat($(".doodler").css("bottom")) <= 0) {
+            isGameOver = true;
+            // console.log(isGameOver);
+        }
+        platforms.forEach(platform => {
+            console.log(parseFloat(platform.css("bottom")));
+            if (
+                (parseFloat($(".doodler").css("bottom")) >= parseFloat(platform.css("bottom"))) &&
+                (parseFloat($(".doodler").css("bottom")) <= parseFloat(platform.css("bottom")) + platformHeight) &&
+                (parseFloat($(".doodler").css("left")) + 30 >= parseFloat(platform.css("left"))) && // doodler width = 30px
+                (parseFloat($(".doodler").css("left")) <= parseFloat(platform.css("left")) + platformWidth)
+                // (isJumping = false)
+            ) {
+                console.log("jumped on platform");
+                startPoint = parseFloat($(".doodler").css("bottom"));
+                jump();
+                isJumping = true;
+            }
+        })
+    }, 200);
 }
 
 const jump = () => {
+    isJumping = true;
+    clearInterval(fallTimer);
     jumpTimer = setInterval(function() {
+        // console.log(startPoint);
+        // console.log('1', $(".doodler").css("bottom"));
         let doodlerBottom = parseFloat($(".doodler").css("bottom")) + jumpDist;
         $(".doodler").css("bottom", `${doodlerBottom}` + `px`);
-    }, 200)
-
-    // $(".doodler").switchClass("fall", "jump", 2000, "linear", function() {
-    //     console.log("max");
-    //     fall();
-        // if ($(".doodler").css("bottom") > "150px") {
-        //     console.log("max");
-        //     fall();
-        // }
-    // });
-    
-    // $(".doodler").removeClass("fall");
-    // $(".doodler").addClass("jump");
-    // console.log(getComputedStyle(document.querySelector(".doodler").bottom));
-
-    // if (parseFloat($(".doodler").css("bottom")) > 250) {
-    //     console.log(parseFloat($(".doodler").css("bottom")));
-    // }
-}
-
-const moveUpDown = () => {
-    // while (gameOver === false) {
-    //     if (isJumping === false) {
-    //         jump();
-    //     } else {
-    //         fall();
-    //     }
-    // }
-        // if ((platforms[0].css("left") - platformWidth < $(".doodler").css("left") < platforms[0].css("left") + platformWidth) && 
-        //     ($(".doodler").css("bottom") === platforms[0].css("bottom") + platformHeight)) {
-        //         jump();
-        // }
-        // else if () {
-        //     // fall();
-        // }
+        // console.log('2', $(".doodler").css("bottom"));
+        // console.log('s',startPoint)
+        if (parseFloat($(".doodler").css("bottom")) > startPoint + 200) {
+            fall();
+            isJumping = false;
+        }
+    }, 200);
 }
 
 const moveLeftRight = (event) => {
@@ -102,17 +121,10 @@ const moveLeftRight = (event) => {
 
 // Execute
 $(() => {
-        makePlatform(6);
+        makePlatforms(6);
         makeDoodler();
-        jump();
-        // $(".doodler").on("click", function() {
-        //     $(this).animate({bottom: "+=300"}, 1000);
-        //     $(this).toggleClass("clickedFall");
-        // })
-        // $(".doodler").on("click", function() {
-        //     $(this).toggleClass("clickedJump");
-        // })
-        // $(".button").on("click", fall);
+        setInterval(movePlatforms, 50);
+        jump(startPoint);
         document.onkeydown = moveLeftRight;
         // have to add onkeyup?
     
