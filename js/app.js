@@ -1,13 +1,17 @@
 // JS Data
 const platforms = [];
-let startPoint = 100;
+let startPoint = 90;
 const platBottom = startPoint;
 let isGameOver = false;
-const jumpDist = 10;
-const fallDist = 10;
+let jumpDist = 20;
+let fallDist = 10;
+// let leftRightDist = 5;
 let isJumping;
 let jumpTimer;
 let fallTimer;
+// let isMovingLeft;
+// let leftTimer;
+// let rightTimer;
 let score = 0;
 
 // CSS Data
@@ -39,8 +43,9 @@ const newPlatform = (newPlatBottom) => {
     $(".container").append($platform);
 }
 
-const movePlatforms = () => {
-    if (parseFloat($(".doodler").css("bottom")) > 450) {
+// define magic numbers with constants at the top
+const refreshPlatforms = () => {
+    if (parseFloat($(".doodler").css("bottom")) > 300) {
         platforms.forEach(platform => {
             let newBottom = parseFloat(platform.css("bottom")) - 3;
             platform.css("bottom", `${newBottom}` + `px`);
@@ -57,7 +62,7 @@ const movePlatforms = () => {
 
 const makeDoodler = () => {
     const $doodler = $("<div>").addClass("doodler");
-    let doodlerLeft = parseFloat(platforms[0].css("left")) + (platformWidth / 4);
+    let doodlerLeft = parseFloat(platforms[0].css("left")) + (platformWidth / 4); // can randomnise his starting left position
     let doodlerBottom = platBottom + platformHeight;
     $doodler.css("left", `${doodlerLeft}` + `px`);
     $doodler.css("bottom", `${doodlerBottom}` + `px`);
@@ -70,9 +75,10 @@ const fall = () => {
     fallTimer = setInterval(function() {
         let doodlerBottom = parseFloat($(".doodler").css("bottom")) - fallDist;
         $(".doodler").css("bottom", `${doodlerBottom}` + `px`);
+        // fallDist *= 1.005;
         if (parseFloat($(".doodler").css("bottom")) <= 0) {
             isGameOver = true;
-            // console.log(isGameOver);
+            gameOver();
         }
         platforms.forEach(platform => {
             console.log(parseFloat(platform.css("bottom")));
@@ -81,49 +87,102 @@ const fall = () => {
                 (parseFloat($(".doodler").css("bottom")) <= parseFloat(platform.css("bottom")) + platformHeight) &&
                 (parseFloat($(".doodler").css("left")) + 30 >= parseFloat(platform.css("left"))) && // doodler width = 30px
                 (parseFloat($(".doodler").css("left")) <= parseFloat(platform.css("left")) + platformWidth)
-                // (isJumping = false)
             ) {
                 console.log("jumped on platform");
+                fallDist = 10;
                 startPoint = parseFloat($(".doodler").css("bottom"));
-                jump();
                 isJumping = true;
+                jump();
             }
         })
-    }, 200);
+    }, 40);
 }
 
 const jump = () => {
     isJumping = true;
     clearInterval(fallTimer);
     jumpTimer = setInterval(function() {
-        // console.log(startPoint);
-        // console.log('1', $(".doodler").css("bottom"));
         let doodlerBottom = parseFloat($(".doodler").css("bottom")) + jumpDist;
         $(".doodler").css("bottom", `${doodlerBottom}` + `px`);
-        // console.log('2', $(".doodler").css("bottom"));
-        // console.log('s',startPoint)
-        if (parseFloat($(".doodler").css("bottom")) > startPoint + 200) {
-            fall();
+        jumpDist *= 0.9;
+        if (parseFloat($(".doodler").css("bottom")) > startPoint + 150) {
             isJumping = false;
+            jumpDist = 20;
+            fall();
         }
-    }, 200);
+    }, 40);
 }
 
-const moveLeftRight = (event) => {
+// const moveLeft= () => {
+//     isMovingLeft = true;
+//     clearInterval(rightTimer);
+//     leftTimer = setInterval(function() {
+//         let doodlerLeft = parseFloat($(".doodler").css("left")) - leftRightDist;
+//         $(".doodler").css("left", `${doodlerLeft}` + `px`);
+//         if (parseFloat($(".doodler").css("left")) <= 0) {
+//             // isMovingLeft = false;
+//             moveRight();
+//         }
+//     }, 200)
+// }
+
+// const moveRight = () => {
+//     isMovingLeft = false;
+//     clearInterval(leftTimer);
+//     rightTimer = setInterval(function() {
+//         let doodlerLeft = parseFloat($(".doodler").css("left")) + leftRightDist;
+//         $(".doodler").css("left", `${doodlerLeft}` + `px`);
+//         if (parseFloat($(".doodler").css("left")) >= containerWidth - 30) {
+//             // isMovingLeft = true;
+//             moveLeft();
+//         }
+//     }, 200)
+// }
+
+// const keyControls = (event) => {
+//     if (event.key === "ArrowLeft") {
+//         moveLeft();
+//         console.log("left");
+//     } else if (event.key === "ArrowRight") {
+//         moveRight();
+//         console.log("right");
+//     }
+// }
+
+const moveLeftRight = (event) => { // separate into left() & right() functions?
     if (event.key === "ArrowLeft") {
-        $(".doodler").animate({left: "-=10"}, 10); // separate into left() & right() functions?
-        console.log("left");
+        if (parseFloat($(".doodler").css("left")) < -30) {
+            $(".doodler").css("left", `${containerWidth}` + `px`);
+        } else {
+            $(".doodler").animate({left: "-=15"}, 10); 
+            console.log("left");
+        }
     } else if (event.key === "ArrowRight") {
-        $(".doodler").animate({left: "+=10"}, 10);
-        console.log("right");
+        if (parseFloat($(".doodler").css("left")) > containerWidth) {
+            $(".doodler").css("left", `${-30}` + `px`);
+        } else {
+            $(".doodler").animate({left: "+=15"}, 10);
+            console.log("right");
+        }
+    }
+}
+
+const gameOver = () => {
+    if (isGameOver) {
+        clearInterval(fallTimer);
+        $(".container").empty();
+        $(".container").html("<h1>You fell! You crossed " + `${score}` + " platforms </h1>");
+        console.log("emptied");
+    } else {
+        //startGame();
     }
 }
 
 // Execute
 $(() => {
-        makePlatforms(6);
+        makePlatforms(7);
         makeDoodler();
-        setInterval(movePlatforms, 50);
+        setInterval(refreshPlatforms, 20);
         jump(startPoint);
         document.onkeydown = moveLeftRight;
         // have to add onkeyup?

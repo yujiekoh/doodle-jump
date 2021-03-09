@@ -22,42 +22,4 @@
     position: absolute;
     left: 0px;
     bottom: 0px;
-    /* transition-property: bottom; */
-    /* transition-duration: 2s; */
-    /* transition-timing-function: linear; */
-}
-
-/* .doodler.clickedFall {
-    transform: translateY(100px);
-}
-
-.doodler.clickedJump {
-    transform: translateY(-200px);
-} */
-
-/* .jump { */
-    /* animation-name: jump;
-    animation-duration: 2s;
-    animation-iteration-count: 1;
-    animation-timing-function: linear; */    
-/* } */
-
-
-.fall {
-    animation-name: fall;
-    animation-duration: 2s;
-    animation-iteration-count: 1;
-    animation-timing-function: linear;
-}
-
-@keyframes jump {
-    100% {
-        transform: translateY(-200px);
-    }
-}
-
-@keyframes fall {
-    100% {
-        transform: translateY(100px);
-    }
 }
