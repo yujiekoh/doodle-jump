@@ -11,7 +11,9 @@ let fallTimer;
 let score = 0;
 let isPlayButtonClicked = false;
 const $gameTitle = $("<h1>").addClass("game-title").text("doodle jump");
+const $instructions = $("<p>").addClass("instructions").text("move the doodler with your left & right arrow keys");
 const $playButton = $("<button>").attr("type", "button").addClass("play").text("play");
+const $animateDoodler = $("<div>").addClass("animate-doodler");
 
 // CSS Data
 const containerWidth = 600
@@ -24,7 +26,9 @@ const doodlerLegWidth = 55;
 // Functions
 const makeMenu = () => {
     $(".container").append($gameTitle);
+    $(".container").append($instructions);
     $(".container").append($playButton);
+    $(".container").append($animateDoodler);
 }
 
 const makePlatforms = (num) => {
@@ -150,10 +154,11 @@ const gameOver = () => {
     clearInterval(jumpTimer);
     clearInterval(fallTimer);
     $(".container").empty();
-    const $gameOverDiv = $("<h1>").addClass("game-over").text("game over!");
-    const $score = $("<h3>").addClass("score").text(`your score: ` + `${score}`);
+    const $gameOverDiv = $("<h2>").addClass("game-over").text("game over!");
+    const $score = $("<p>").addClass("score").text(`your score: ` + `${score}`);
     $(".container").append($gameOverDiv);
     $(".container").append($score);
+    $(".container").append($animateDoodler);
 }
 
 const startGame = () => {

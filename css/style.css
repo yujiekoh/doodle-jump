@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
 .container {
     background-image: url("images/space-background.png");
     width: 600px;
@@ -8,34 +10,83 @@
 
 .game-title {
     color: blanchedalmond;
+    font-family: 'Indie Flower', cursive;
+    font-size: 70px;
     position: absolute;
-    left: 100px;
-    top: 100px;
-    transform: rotate(-20deg);
+    left: 120px;
+    top: 40px;
+    transform: rotate(-12deg);
+}
+
+.instructions {
+    color: blanchedalmond;
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+    position: absolute;
+    left: 40px;
+    top: 230px;
 }
 
 .play {
     background-color: blanchedalmond;
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
     position: absolute;
-    left: 100px;
-    top: 200px;
+    left: 120px;
+    top: 380px;
     height: 50px;
-    width: 50px;
+    width: 150px;
+    border-radius: 60px;
+}
+
+.play:hover {
+    background-color:rgb(233, 198, 129);
+}
+
+.animate-doodler {
+    left: 400px;
+    top: 480px;
+    animation-name: animate-doodler;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+}
+
+@keyframes animate-doodler {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-30deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(30deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
 .game-over {
-    color: red;
+    color: rgb(230, 31, 31);
+    font-family: 'Indie Flower', cursive;
+    font-size: 60px;
     position: absolute;
-    left: 200px;
+    left: 160px;
     top: 100px;
-    transform: rotate(-5deg);
+    transform: rotate(-12deg);
 }
 
 .score {
     color: blanchedalmond;
+    font-family: 'Indie Flower', cursive;
+    font-size: 35px;
     position: absolute;
-    left: 200px;
-    top: 200px;
+    left: 210px;
+    top: 270px;
 }
 
 .platform {
@@ -71,7 +122,7 @@
     }
 }
 
-.doodler {
+.doodler, .animate-doodler {
     background-image: url("images/doodler.png");
     width: 87px;
     height: 85px;
