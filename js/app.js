@@ -95,7 +95,7 @@ const fall = () => {
     fallTimer = setInterval(function() {
         let doodlerBottom = parseFloat($(".doodler").css("bottom")) - fallDist;
         $(".doodler").css("bottom", `${doodlerBottom}` + `px`);
-        // fallDist *= 1.005; tried to decrease speed as doodler is falling but doodler fell through the platform
+        // fallDist *= 1.005; tried to increase speed as doodler is falling but doodler fell through the platform
         if (parseFloat($(".doodler").css("bottom")) <= 0) {
             isPlayButtonClicked = false;
             isGameOver = true;
