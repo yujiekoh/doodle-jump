@@ -3,6 +3,39 @@
     width: 600px;
     height: 700px;
     position: relative;
+    margin: auto;
+}
+
+.game-title {
+    color: blanchedalmond;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    transform: rotate(-20deg);
+}
+
+.play {
+    background-color: blanchedalmond;
+    position: absolute;
+    left: 100px;
+    top: 200px;
+    height: 50px;
+    width: 50px;
+}
+
+.game-over {
+    color: red;
+    position: absolute;
+    left: 200px;
+    top: 100px;
+    transform: rotate(-5deg);
+}
+
+.score {
+    color: blanchedalmond;
+    position: absolute;
+    left: 200px;
+    top: 200px;
 }
 
 .platform {
@@ -22,26 +55,19 @@
     position: absolute;
     left: 0px;
     bottom: 0px;
-    border-radius: 10px;
+    border-radius: 15px;
     animation-name: horizontal;
     animation-iteration-count: infinite;
-    animation-duration: 6s;
+    animation-duration: 5s;
     animation-timing-function: linear;
-    
 }
 
 @keyframes horizontal {
-    25% {
-        transform: translateX(30px);
-    }
     50% {
-        transform: translateX(60px);   
-    }
-    75% {
-        transform: translateX(-30px);   
+        transform: translateX(70px);   
     }
     100% {
-        transform: translateX(-60px);
+        transform: translateX(0px);
     }
 }
 
@@ -50,8 +76,4 @@
     width: 87px;
     height: 85px;
     position: absolute;
-}
-
-.game-over {
-    color: white;
 }
